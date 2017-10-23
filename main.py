@@ -340,6 +340,7 @@ for f in files:
 			c2 = []
 			c3 = []
 			
+			#vertices of each boxes in the QR
 			c1 = getVertices(contours, top, slope)
 			c2 = getVertices(contours, right, slope)
 			c3 = getVertices(contours, bottom, slope)
@@ -353,7 +354,7 @@ for f in files:
 			iflag, N = getIntersection(C2[1], C2[2], C3[3], C3[2])
 
 			
-
+	#The object points are found by running the same code using pattern.jpg
 	objectPoints = []
 	objectPoints.append([41,39,0])
 	objectPoints.append([108,39,0])
@@ -370,6 +371,7 @@ for f in files:
 	objectPoints.append([291.6,291.6,0])
 	objectPoints = np.array(objectPoints, np.float32)
 
+	#The points in C1,C2,C3 has the each corner of the boxes and C4 has the independent corner adding QR_x and QR_y get the actual position of the boxes in the image
 	imagePoints = []
 	for point in C1:
 		imagePoints.append((point[0] + QR_x, point[1] + QR_y))
@@ -380,6 +382,8 @@ for f in files:
 	imagePoints.append((N[0] + QR_x, N[1] + QR_y))
 	imagePoints = np.array(imagePoints, np.float32)
 
+
+	#Camera matrix of iPhone 6 which is calculated manually.
 	camera_matrix = np.zeros((3,3), np.float32)
 	camera_matrix[0][0] = fx
 	camera_matrix[1][1] = fy
@@ -389,16 +393,20 @@ for f in files:
 
 	#rvec, tvec = cv2.solvePnP(np.array(objectPoints).astype('float32'), np.array(imagePoints).astype('float32'),np.array(camera_matrix).astype('float32'),None)[-2:]
 
+	#rotation vector and translation vector
 	rvec, tvec = cv2.solvePnP(objectPoints, imagePoints, camera_matrix, None)[-2:]
 
+	#rotation matrix corresponding to the rotatoin vector.
 	rotation = cv2.Rodrigues(rvec)[0]
-	rotation = np.transpose(rotation)#reshape(3,3)
+
+	#
+	rotation_tr = np.transpose(rotation)
 
 
 	#RC + T = 0 -> C = -R-1 * T
-	camera_coordinates = np.matmul(-rotation,tvec)
+	camera_coordinates = np.matmul(-rotation_tr,tvec)
 
-
+	#Pitch, Yaw and Roll of the camera
 	angle = rotationMatrixToEulerAngles(rotation)
 	print('---------------------------------------------------------------------------------------------------------')
 	print("Displaying the results of : " + f)
