@@ -1,15 +1,14 @@
-# CameraMapping
-Map the image co-ordinate to the camera and find the camera location and orientation
+
 # CameraMapping
 Map the image co-ordinate to the camera and find the camera location and orientation
 
-###INSTRUCTIONS: 
+### INSTRUCTIONS: 
 1.  Clone or Download the repository
 2. cd CameraMapping
 3. run python main.py
 
 
-###OVERVIEW
+### OVERVIEW
 Initially I am removing the image pattern for which we know the object location (i.e) QR code as follows
 
 
@@ -39,8 +38,8 @@ z = 0
 
 
 
-###RESULT:
-The results will be shown as below
+# RESULT:
+### The results will be shown as below
 
 Starting..... IMG_6719.JPG
 ---------------------------------------------------------------------------------------------------------
